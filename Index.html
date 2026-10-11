@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Video Prompt Generator</title>
+    <style>
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            max-width: 600px; 
+            margin: 30px auto; 
+            padding: 20px; 
+            background-color: #f0f2f5; 
+            color: #333;
+        }
+        .container { 
+            background: white; 
+            padding: 25px; 
+            border-radius: 12px; 
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05); 
+        }
+        h2 { 
+            text-align: center; 
+            color: #1a73e8; 
+            margin-bottom: 20px;
+        }
+        label { 
+            font-weight: 600; 
+            margin-top: 15px; 
+            display: block; 
+            font-size: 14px;
+        }
+        input, select, textarea, button { 
+            width: 100%; 
+            padding: 12px; 
+            margin-top: 8px; 
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+            box-sizing: border-box; 
+            font-size: 14px;
+        }
+        textarea { resize: vertical; }
+        button.primary-btn { 
+            background-color: #1a73e8; 
+            color: white; 
+            cursor: pointer; 
+            font-weight: bold; 
+            margin-top: 20px; 
+            border: none;
+            transition: background 0.3s;
+        }
+        button.primary-btn:hover { background-color: #1557b0; }
+        button:disabled { background-color: #9aa0a6; cursor: not-allowed; }
+        
+        .error-box { 
+            background: #fce8e6; 
+            color: #c5221f; 
+            padding: 15px; 
+            border-radius: 8px; 
+            margin-top: 20px; 
+            display: none; 
+            border: 1px solid #fad2cf;
+        }
+        .restart-btn { 
+            background-color: #d93025; 
+            color: white; 
+            border: none; 
+            font-weight: bold;
+        }
+        .restart-btn:hover { background-color: #a50e0e; }
+        
+        #resultBox { 
+            margin-top: 25px; 
+            padding: 20px; 
+            background: #e8f0fe; 
+            border-radius: 8px; 
+            white-space: pre-wrap; 
+            display: none; 
+            border: 1px solid #d2e3fc;
+            line-height: 1.6;
+        }
+        .grid-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>🎬 AI Video & Image Prompt Generator</h2>
+    
+    <label for="topic">Topik / Ide Utama:</label>
+    <textarea id="topic" rows="3" placeholder="Contoh: Detik-detik penyergapan komodo, pertarungan epik semut hitam dan rangrang, predator rawa..."></textarea>
+    
+    <label for="type">Tipe Konten:</label>
+    <select id="type" onchange="toggleVideoOptions()">
+        <option value="video">Generate Video Prompt</option>
+        <option value="image">Generate Image Prompt</option>
+    </select>
+    
+    <div id="videoOptions">
+        <label for="ratio">Rasio Aspek:</label>
+        <select id="ratio">
+            <option value="9:16">9:16 (Vertical / FYP)</option>
+            <option value="16:9">16:9 (Horizontal)</option>
+            <option value="1:1">1:1 (Square)</option>
+        </select>
+        
+        <div class="grid-options">
+            <div>
+                <label for="duration">Durasi (10 - 60 dtk):</label>
+                <input type="number" id="duration" min="10" max="60" value="30">
+            </div>
+            <div>
+                <label for="scenes">Max Scene (1 - 10):</label>
+                <input type="number" id="scenes" min="1" max="10" value="5">
+            </div>
+        </div>
+    </div>
+    
+    <button id="generateBtn" class="primary-btn" onclick="generatePrompt()">🚀 Generate Prompt</button>
+    
+    <div id="errorBox" class="error-box">
+        <strong>Terjadi Kesalahan:</strong>
+        <p id="errorMsg"></p>
+        <button class="restart-btn" onclick="restartApp()">🔄 Mulai Ulang / Perbaiki Error</button>
+    </div>
+    
+    <div id="resultBox"></div>
+</div>
+
+<script>
+    // Konfigurasi API
+    const API_KEY = "AIzaSyA_JnL
